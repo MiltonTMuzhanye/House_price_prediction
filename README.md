@@ -5,12 +5,12 @@ This project focuses on predicting house prices using machine learning regressio
 
 ## Dataset
 
-The dataset used includes housing information such as:
-  -Location
-  -Number of bedrooms, bathrooms
-  -Total square footage (SQFT)
-  -Price per square foot (PRICE_PER_SQFT)
-  -Target: Price
+  The dataset used includes housing information such as:
+    -Location
+    -Number of bedrooms, bathrooms
+    -Total square footage (SQFT)
+    -Price per square foot (PRICE_PER_SQFT)
+    -Target: Price
 
 
 
