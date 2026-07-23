@@ -1,0 +1,31 @@
+model:
+  selected_model: "xgboost"
+  version: "1.0.0"
+  
+features:
+  numeric_features:
+    - "SQFT"
+    - "BEDROOMS"
+    - "PRICE_PER_SQFT"
+  
+  categorical_features:
+    - "LOCATION"
+    - "REGION"
+    - "TITLED"
+    - "LEASE"
+    - "FOOTINGS"
+  
+  target: "PRICE"
+
+preprocessing:
+  scaler_type: "standard"
+  encoder_type: "onehot"
+  
+model_params:
+  xgboost:
+    n_estimators: 300
+    max_depth: 7
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42

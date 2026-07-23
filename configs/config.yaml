@@ -1,0 +1,77 @@
+data:
+  raw_path: "data/raw/PUF2023.xlsx"
+  processed_path: "data/processed/house_prices_processed.csv"
+  external_path: "data/external/"
+  
+preprocessing:
+  target_column: "PRICE"
+  features:
+    numeric:
+      - "SQFT"
+      - "BEDROOMS"
+    categorical:
+      - "LOCATION"
+      - "REGION"
+      - "TITLED"
+      - "LEASE"
+      - "FOOTINGS"
+  price_range: [10000, 1000000]
+  sqft_range: [100, 5000]
+  test_size: 0.2
+  random_state: 42
+
+model:
+  models_to_train:
+    - "linear_regression"
+    - "random_forest"
+    - "xgboost"
+    - "lightgbm"
+    - "catboost"
+  
+  random_forest_params:
+    n_estimators: [100, 200, 300]
+    max_depth: [10, 20, 30]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+  
+  xgboost_params:
+    n_estimators: [100, 200, 300]
+    max_depth: [3, 5, 7]
+    learning_rate: [0.05, 0.1, 0.2]
+    subsample: [0.8, 1.0]
+    colsample_bytree: [0.8, 1.0]
+  
+  lightgbm_params:
+    n_estimators: [100, 200, 300]
+    num_leaves: [31, 50, 70]
+    learning_rate: [0.05, 0.1, 0.2]
+    feature_fraction: [0.8, 1.0]
+  
+  catboost_params:
+    iterations: [100, 200, 300]
+    depth: [3, 5, 7]
+    learning_rate: [0.05, 0.1, 0.2]
+
+training:
+  cv_folds: 5
+  scoring: "r2"
+  n_jobs: -1
+  save_artifacts: true
+  experiment_name: "house_price_prediction"
+
+evaluation:
+  metrics:
+    - "mae"
+    - "rmse"
+    - "r2_score"
+    - "mape"
+    - "explained_variance"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: true
+
+frontend:
+  title: "House Price Prediction System"
+  theme: "dark"
