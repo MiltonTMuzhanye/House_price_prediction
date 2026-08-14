@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: house-price-prediction
+Version: 0.1.0
+Summary: End-to-end house price prediction system
+Author-email: Your Name <your.email@example.com>
+Requires-Dist: pandas>=2.2.0
+Requires-Dist: numpy>=2.0.0
+Requires-Dist: scikit-learn>=1.5.0
+Requires-Dist: xgboost>=2.0.0
+Requires-Dist: lightgbm>=4.1.0
+Requires-Dist: catboost>=1.2.5
+Requires-Dist: matplotlib>=3.8.0
+Requires-Dist: seaborn>=0.13.0
+Requires-Dist: plotly>=5.18.0
+Requires-Dist: streamlit>=1.36.0
+Requires-Dist: fastapi>=0.110.0
+Requires-Dist: uvicorn>=0.30.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: python-multipart>=0.0.9
+Requires-Dist: pyyaml>=6.0.1
+Requires-Dist: mlflow>=2.10.0
+Requires-Dist: joblib>=1.4.0
+Requires-Dist: openpyxl>=3.1.2
+Requires-Dist: pytest>=8.0.0
+Requires-Dist: black>=24.0.0
+Requires-Dist: flake8>=7.0.0
+Requires-Dist: isort>=5.13.0
+Requires-Dist: python-dotenv>=1.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: flake8>=7.0.0; extra == "dev"
+Requires-Dist: isort>=5.13.0; extra == "dev"
