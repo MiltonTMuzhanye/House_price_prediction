@@ -18,10 +18,10 @@ def main():
         ingestion = DataIngestion()
         validator = DataValidator()
         preprocessor = DataPreprocessor()
-        
+
         # Load raw data
         df = ingestion.load_data()
-        
+
         # Validate data
         if not validator.validate_schema(df):
             raise ValueError("Data schema validation failed")

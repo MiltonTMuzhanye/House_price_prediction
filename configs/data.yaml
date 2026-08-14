@@ -1,0 +1,99 @@
+# configs/data.yaml
+data:
+  # Source configuration
+  source:
+    type: "excel"  # or "csv", "database", "api"
+    path: "data/raw/PUF2023.xlsx"
+    sheet_name: 0  # For Excel files
+    
+  # Data validation rules
+  validation:
+    schema:
+      required_columns:
+        - "PRICE"
+        - "SQFT"
+        - "BEDROOMS"
+        - "LOCATION"
+        - "REGION"
+    
+    quality_rules:
+      price:
+        min: 10000
+        max: 1000000
+        null_threshold: 0.05  # Max 5% missing
+      
+      sqft:
+        min: 100
+        max: 5000
+        null_threshold: 0.05
+      
+      bedrooms:
+        min: 0
+        max: 10
+        null_threshold: 0.05
+    
+    outlier_detection:
+      method: "iqr"  # or "zscore", "isolation_forest"
+      iqr_multiplier: 1.5
+
+  # Feature mapping
+  categorical_mappings:
+    LOCATION:
+      1: "Urban"
+      2: "Suburban"
+      3: "Rural"
+    
+    REGION:
+      1: "Northeast"
+      2: "Midwest"
+      3: "South"
+      4: "West"
+    
+    TITLED:
+      1: "Vehicle"
+      2: "Land-Home"
+      3: "Other"
+    
+    LEASE:
+      1: 1  # Yes
+      2: 0  # No
+
+  # Feature engineering
+  feature_engineering:
+    create_features:
+      - name: "PRICE_PER_SQFT"
+        formula: "PRICE / SQFT"
+      
+      - name: "BEDROOMS_PER_SQFT"
+        formula: "BEDROOMS / SQFT * 1000"
+      
+      - name: "LOG_PRICE"
+        formula: "log1p(PRICE)"
+      
+      - name: "LOG_SQFT"
+        formula: "log1p(SQFT)"
+    
+    drop_columns:
+      - "WEIGHT"
+      - "STATUS"
+      - "SECTIONS"
+
+  # Output configuration
+  output:
+    processed_path: "data/processed/house_prices_processed.csv"
+    feature_list_path: "artifacts/feature_lists/feature_names.json"
+    save_format: "csv"  # or "parquet", "feather"
+
+  # Data versioning
+  versioning:
+    enabled: true
+    version_file: "data/version.txt"
+    backup_raw: true
+
+  # Data splits
+  splits:
+    train: 0.7
+    validation: 0.15
+    test: 0.15
+    random_state: 42
+    stratify: false  # Whether to stratify by target or category
