@@ -1,0 +1,89 @@
+2026-08-16 00:04:58,086 - house_price_prediction - INFO - Starting data ingestion process...
+2026-08-16 00:05:01,232 - house_price_prediction - INFO - Loaded data with shape: (6017, 28)
+2026-08-16 00:05:01,232 - house_price_prediction - INFO - Schema validation passed
+2026-08-16 00:05:01,251 - house_price_prediction - INFO - Data quality report: {'total_rows': 6017, 'missing_values': {'weight': 0, 'status': 0, 'FINALDEST': 0, 'FOOTINGS': 0, 'LEASE': 0, 'LOCATION': 0, 'REGION': 0, 'PIERS': 0, 'SECURED': 0, 'TITLED': 0, 'SECTIONS': 0, 'PRICE': 0, 'SQFT': 0, 'BEDROOMS': 0, 'SHIPMONTH': 0, 'WGTADJ': 0, 'CONTROL': 0, 'jstatus': 0, 'jprice': 0, 'jsqft': 0, 'jbedroom': 0, 'jlease': 0, 'jfinaldest': 0, 'jtitle': 0, 'jsecured': 0, 'jlocation': 0, 'jfootings': 0, 'jpiers': 0}, 'duplicates': np.int64(0), 'price_outliers': 1448, 'sqft_outliers': 1233}
+2026-08-16 00:05:01,251 - house_price_prediction - INFO - Data quality report: {'total_rows': 6017, 'missing_values': {'weight': 0, 'status': 0, 'FINALDEST': 0, 'FOOTINGS': 0, 'LEASE': 0, 'LOCATION': 0, 'REGION': 0, 'PIERS': 0, 'SECURED': 0, 'TITLED': 0, 'SECTIONS': 0, 'PRICE': 0, 'SQFT': 0, 'BEDROOMS': 0, 'SHIPMONTH': 0, 'WGTADJ': 0, 'CONTROL': 0, 'jstatus': 0, 'jprice': 0, 'jsqft': 0, 'jbedroom': 0, 'jlease': 0, 'jfinaldest': 0, 'jtitle': 0, 'jsecured': 0, 'jlocation': 0, 'jfootings': 0, 'jpiers': 0}, 'duplicates': np.int64(0), 'price_outliers': 1448, 'sqft_outliers': 1233}
+2026-08-16 00:05:01,261 - house_price_prediction - INFO - Cleaned data shape: (4569, 17)
+2026-08-16 00:05:01,276 - house_price_prediction - INFO - Engineered features: ['weight', 'status', 'FINALDEST', 'FOOTINGS', 'LEASE', 'LOCATION', 'REGION', 'PIERS', 'SECURED', 'TITLED', 'SECTIONS', 'PRICE', 'SQFT', 'BEDROOMS', 'SHIPMONTH', 'WGTADJ', 'CONTROL', 'PRICE_PER_SQFT', 'BEDROOMS_PER_SQFT', 'LOG_PRICE', 'LOG_SQFT']
+2026-08-16 00:05:01,473 - house_price_prediction - INFO - Saved processed data to data/processed/house_prices_processed.csv
+2026-08-16 00:05:01,473 - house_price_prediction - INFO - Data ingestion and preprocessing completed successfully
+2026-08-16 01:03:58,779 - house_price_prediction - INFO - Starting model training process...
+2026-08-16 01:03:58,930 - house_price_prediction - INFO - Loaded data shape: (4569, 21)
+2026-08-16 01:03:59,095 - house_price_prediction - INFO - Saved artifact to artifacts/preprocessor.joblib
+2026-08-16 01:03:59,096 - house_price_prediction - INFO - Saved artifact to artifacts/feature_columns.joblib
+2026-08-16 01:03:59,096 - house_price_prediction - ERROR - Error in model training: name 'lgb' is not defined
+2026-08-16 01:05:58,185 - house_price_prediction - INFO - Starting model training process...
+2026-08-16 01:05:58,215 - house_price_prediction - INFO - Loaded data shape: (4569, 21)
+2026-08-16 01:05:58,313 - house_price_prediction - INFO - Saved artifact to artifacts/preprocessor.joblib
+2026-08-16 01:05:58,314 - house_price_prediction - INFO - Saved artifact to artifacts/feature_columns.joblib
+2026-08-16 01:06:14,772 - house_price_prediction - INFO - Training linear_regression...
+2026-08-16 01:06:15,130 - house_price_prediction - INFO - Training Linear Regression model...
+2026-08-16 01:06:22,166 - house_price_prediction - INFO - Saved artifact to artifacts/trained_models/linearregression.joblib
+2026-08-16 01:06:22,166 - house_price_prediction - INFO - Saved LinearRegression model to artifacts/trained_models/linearregression.joblib
+2026-08-16 01:06:22,241 - house_price_prediction - INFO - Training random_forest...
+2026-08-16 01:06:22,549 - house_price_prediction - INFO - Training Random Forest model...
+2026-08-16 01:06:30,055 - house_price_prediction - INFO - Saved artifact to artifacts/trained_models/randomforest.joblib
+2026-08-16 01:06:30,055 - house_price_prediction - INFO - Saved RandomForest model to artifacts/trained_models/randomforest.joblib
+2026-08-16 01:06:30,319 - house_price_prediction - INFO - Training xgboost...
+2026-08-16 01:06:30,388 - house_price_prediction - INFO - Training XGBoost model...
+2026-08-16 01:06:32,891 - house_price_prediction - INFO - Saved artifact to artifacts/trained_models/xgboost.joblib
+2026-08-16 01:06:32,891 - house_price_prediction - INFO - Saved XGBoost model to artifacts/trained_models/xgboost.joblib
+2026-08-16 01:06:33,110 - house_price_prediction - INFO - Training lightgbm...
+2026-08-16 01:06:33,186 - house_price_prediction - INFO - Training LightGBM model...
+2026-08-16 01:18:11,797 - house_price_prediction - INFO - Saved artifact to artifacts/trained_models/lightgbm.joblib
+2026-08-16 01:18:11,798 - house_price_prediction - INFO - Saved LightGBM model to artifacts/trained_models/lightgbm.joblib
+2026-08-16 01:18:11,845 - house_price_prediction - INFO - Training catboost...
+2026-08-16 01:18:11,903 - house_price_prediction - INFO - Training CatBoost model...
+2026-08-16 01:18:16,550 - house_price_prediction - INFO - Saved artifact to artifacts/trained_models/catboost.joblib
+2026-08-16 01:18:16,550 - house_price_prediction - INFO - Saved CatBoost model to artifacts/trained_models/catboost.joblib
+2026-08-16 01:18:16,618 - house_price_prediction - INFO - Best model: catboost with R2: 0.9927
+2026-08-16 01:18:16,624 - house_price_prediction - INFO - Saved artifact to artifacts/best_model_info.joblib
+2026-08-16 01:18:16,628 - house_price_prediction - INFO - 
+==================================================
+2026-08-16 01:18:16,629 - house_price_prediction - INFO - Model Training Results:
+2026-08-16 01:18:16,629 - house_price_prediction - INFO - 
+linear_regression:
+2026-08-16 01:18:16,629 - house_price_prediction - INFO -   mae: 7091.7045
+2026-08-16 01:18:16,629 - house_price_prediction - INFO -   rmse: 12472.9516
+2026-08-16 01:18:16,630 - house_price_prediction - INFO -   r2_score: 0.9426
+2026-08-16 01:18:16,630 - house_price_prediction - INFO -   mape: 5.4450
+2026-08-16 01:18:16,630 - house_price_prediction - INFO -   cv_mean: 0.9470
+2026-08-16 01:18:16,631 - house_price_prediction - INFO -   cv_std: 0.0072
+2026-08-16 01:18:16,632 - house_price_prediction - INFO - 
+random_forest:
+2026-08-16 01:18:16,636 - house_price_prediction - INFO -   mae: 1120.3222
+2026-08-16 01:18:16,636 - house_price_prediction - INFO -   rmse: 5842.7489
+2026-08-16 01:18:16,636 - house_price_prediction - INFO -   r2_score: 0.9874
+2026-08-16 01:18:16,636 - house_price_prediction - INFO -   mape: 0.6225
+2026-08-16 01:18:16,637 - house_price_prediction - INFO -   cv_mean: 0.9941
+2026-08-16 01:18:16,637 - house_price_prediction - INFO -   cv_std: 0.0021
+2026-08-16 01:18:16,639 - house_price_prediction - INFO - 
+xgboost:
+2026-08-16 01:18:16,641 - house_price_prediction - INFO -   mae: 1641.4207
+2026-08-16 01:18:16,644 - house_price_prediction - INFO -   rmse: 5527.4075
+2026-08-16 01:18:16,652 - house_price_prediction - INFO -   r2_score: 0.9887
+2026-08-16 01:18:16,653 - house_price_prediction - INFO -   mape: 1.0859
+2026-08-16 01:18:16,653 - house_price_prediction - INFO -   cv_mean: 0.9940
+2026-08-16 01:18:16,654 - house_price_prediction - INFO -   cv_std: 0.0015
+2026-08-16 01:18:16,654 - house_price_prediction - INFO - 
+lightgbm:
+2026-08-16 01:18:16,655 - house_price_prediction - INFO -   mae: 1449.3561
+2026-08-16 01:18:16,656 - house_price_prediction - INFO -   rmse: 5584.3925
+2026-08-16 01:18:16,658 - house_price_prediction - INFO -   r2_score: 0.9885
+2026-08-16 01:18:16,664 - house_price_prediction - INFO -   mape: 0.9291
+2026-08-16 01:18:16,664 - house_price_prediction - INFO -   cv_mean: 0.9948
+2026-08-16 01:18:16,664 - house_price_prediction - INFO -   cv_std: 0.0008
+2026-08-16 01:18:16,665 - house_price_prediction - INFO - 
+catboost:
+2026-08-16 01:18:16,666 - house_price_prediction - INFO -   mae: 1038.6087
+2026-08-16 01:18:16,667 - house_price_prediction - INFO -   rmse: 4452.0501
+2026-08-16 01:18:16,668 - house_price_prediction - INFO -   r2_score: 0.9927
+2026-08-16 01:18:16,672 - house_price_prediction - INFO -   mape: 0.6722
+2026-08-16 01:18:16,680 - house_price_prediction - INFO -   cv_mean: 0.9986
+2026-08-16 01:18:16,681 - house_price_prediction - INFO -   cv_std: 0.0003
+2026-08-16 01:18:16,681 - house_price_prediction - INFO - ==================================================
+2026-08-16 01:18:16,681 - house_price_prediction - INFO - Model training completed successfully
+2026-08-16 01:39:15,040 - house_price_prediction - INFO - Starting model evaluation...
+2026-08-16 01:39:15,194 - house_price_prediction - INFO - Calculated metrics: {'mae': 622.6531062467812, 'rmse': np.float64(2096.5842937504676), 'mse': 4395665.700801146, 'r2_score': 0.9982756949839848, 'explained_variance': 0.9982783215408787, 'mape': 0.4745743073526214}
+2026-08-16 01:39:15,344 - house_price_prediction - INFO - Metrics saved to reports/metrics/evaluation_metrics.csv
+2026-08-16 01:39:15,345 - house_price_prediction - ERROR - Error in model evaluation: All arrays must be of the same length
