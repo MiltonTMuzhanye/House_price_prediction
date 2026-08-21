@@ -43,18 +43,53 @@ class ModelExplainer:
         plt.show()
     
     def get_global_importance(self) -> pd.DataFrame:
-        """Get global feature importance"""
-        if hasattr(self.model, 'feature_importances_'):
-            importance = self.model.feature_importances_
-        elif hasattr(self.model, 'coef_'):
-            importance = np.abs(self.model.coef_)
+        """Get global feature importance."""
+
+        if hasattr(
+            self.model,
+            'feature_importances_'
+        ):
+            importance = np.asarray(
+                self.model.feature_importances_
+            )
+
+        elif hasattr(
+            self.model,
+            'coef_'
+        ):
+            importance = np.asarray(
+                self.model.coef_
+            )
+
+            importance = np.abs(
+                importance
+            )
+
         else:
-            raise ValueError("Model doesn't support feature importance")
-        
+            raise ValueError(
+                "Model doesn't support feature importance."
+            )
+
+        feature_names = list(
+            self.feature_names
+        )
+
+        if len(feature_names) != len(importance):
+
+            raise ValueError(
+                "Feature-name count does not match "
+                "model feature-importance count. "
+                f"Feature names: {len(feature_names)}, "
+                f"importance values: {len(importance)}"
+            )
+
         return pd.DataFrame({
-            'feature': self.feature_names,
+            'feature': feature_names,
             'importance': importance
-        }).sort_values('importance', ascending=False)
+        }).sort_values(
+            'importance',
+            ascending=False
+        ).reset_index(drop=True)
     
     def partial_dependence_plots(self, X, feature, save_path=None):
         """Create partial dependence plot for a feature"""

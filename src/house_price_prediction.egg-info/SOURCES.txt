@@ -15,11 +15,11 @@ src/house_price_prediction/features/engineering.py
 src/house_price_prediction/features/selection.py
 src/house_price_prediction/features/transformers.py
 src/house_price_prediction/models/base_model.py
-src/house_price_prediction/models/catboost.py
-src/house_price_prediction/models/lightgbm.py
-src/house_price_prediction/models/linear_regression.py
+src/house_price_prediction/models/baseline.py
+src/house_price_prediction/models/catboost_model.py
+src/house_price_prediction/models/lightgbm_model.py
 src/house_price_prediction/models/random_forest.py
-src/house_price_prediction/models/xgboost.py
+src/house_price_prediction/models/xgboost_model.py
 src/house_price_prediction/pipelines/batch_prediction.py
 src/house_price_prediction/pipelines/inference_pipeline.py
 src/house_price_prediction/pipelines/training_pipeline.py

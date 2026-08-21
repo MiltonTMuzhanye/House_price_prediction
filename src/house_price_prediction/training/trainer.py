@@ -37,51 +37,99 @@ class ModelTrainer:
         models_to_train = models_config.get('models_to_train', list(self.models.keys()))
         self.models = {k: v for k, v in self.models.items() if k in models_to_train}
     
-    def train_and_evaluate(self, X, y, test_size=0.2, cv_folds=5):
-        """Train and evaluate all models"""
-        # Split data
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=test_size, random_state=42
+    def train_and_evaluate(self, X_train, y_train, X_test, y_test):
+        """Train and evaluate all models."""
+
+        cv_folds = config.get(
+            'training.cv_folds',
+            5
         )
-        
-        # Initialize MLflow
-        mlflow.set_experiment(config.get('training.experiment_name', 'house_price_prediction'))
-        
+
+        scoring = config.get(
+            'training.scoring',
+            'r2'
+        )
+
+        mlflow.set_experiment(
+            config.get(
+                'training.experiment_name',
+                'house_price_prediction'
+            )
+        )
+
         for name, model in self.models.items():
-            logger.info(f"Training {name}...")
-            
-            with mlflow.start_run(run_name=name):
-                # Train model
-                model.train(X_train, y_train)
-                predictions = model.predict(X_test)
-                
-                # Evaluate
-                metrics = self.evaluate(y_test, predictions)
-                self.results[name] = metrics
-                
-                # Cross validation
-                cv_scores = cross_val_score(
-                    model.model, X, y, cv=cv_folds, 
-                    scoring='r2', n_jobs=-1
+
+            logger.info(
+                f"Training {name}..."
+            )
+
+            with mlflow.start_run(
+                run_name=name
+            ):
+
+                model.train(
+                    X_train,
+                    y_train
                 )
-                self.results[name]['cv_mean'] = np.mean(cv_scores)
-                self.results[name]['cv_std'] = np.std(cv_scores)
-                
-                # Log metrics to MLflow
+
+                predictions = model.predict(
+                    X_test
+                )
+
+                metrics = self.evaluate(
+                    y_test,
+                    predictions
+                )
+
+                self.results[name] = metrics
+
+                cv_scores = cross_val_score(
+                    model.model,
+                    X_train,
+                    y_train,
+                    cv=cv_folds,
+                    scoring=scoring,
+                    n_jobs=-1
+                )
+
+                self.results[name]['cv_mean'] = (
+                    np.mean(cv_scores)
+                )
+
+                self.results[name]['cv_std'] = (
+                    np.std(cv_scores)
+                )
+
                 for metric_name, value in metrics.items():
-                    mlflow.log_metric(metric_name, value)
-                
-                # Log parameters
-                if hasattr(model.model, 'get_params'):
+
+                    mlflow.log_metric(
+                        metric_name,
+                        float(value)
+                    )
+
+                mlflow.log_metric(
+                    'cv_mean',
+                    float(np.mean(cv_scores))
+                )
+
+                mlflow.log_metric(
+                    'cv_std',
+                    float(np.std(cv_scores))
+                )
+
+                if hasattr(
+                    model.model,
+                    'get_params'
+                ):
+
                     params = model.model.get_params()
+
                     mlflow.log_params(params)
-                
-                # Save model
+
                 model.save_model()
-        
-        # Select best model
+
         self.select_best_model()
-        
+
         return self.results
     
     def evaluate(self, y_true, y_pred):

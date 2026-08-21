@@ -6,7 +6,6 @@ features:
   numeric_features:
     - "SQFT"
     - "BEDROOMS"
-    - "PRICE_PER_SQFT"
   
   categorical_features:
     - "LOCATION"
