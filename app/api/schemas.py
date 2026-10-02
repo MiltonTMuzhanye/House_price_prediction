@@ -6,11 +6,11 @@ class HouseFeatures(BaseModel):
     """Input schema for house features"""
     SQFT: int = Field(..., ge=100, le=5000, description="Square footage")
     BEDROOMS: int = Field(..., ge=1, le=10, description="Number of bedrooms")
-    LOCATION: int = Field(..., ge=1, le=3, description="1: Urban, 2: Suburban, 3: Rural")
-    REGION: int = Field(..., ge=1, le=4, description="1: Northeast, 2: Midwest, 3: South, 4: West")
-    TITLED: int = Field(..., ge=1, le=3, description="1: Vehicle, 2: Land-Home, 3: Other")
-    LEASE: int = Field(..., ge=0, le=1, description="0: No lease, 1: Lease")
-    FOOTINGS: int = Field(..., ge=1, le=9, description="Footing type")
+    LOCATION: int = Field(..., description="Source dataset LOCATION code")
+    REGION: int = Field(..., description="Source dataset REGION code")
+    TITLED: int = Field(..., description="Source dataset TITLED code")
+    LEASE: int = Field(..., description="Source dataset LEASE code")
+    FOOTINGS: int = Field(..., description="Source dataset FOOTINGS code")
 
 class PredictionRequest(BaseModel):
     """Request schema for single prediction"""

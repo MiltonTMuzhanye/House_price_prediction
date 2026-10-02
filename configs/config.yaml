@@ -3,18 +3,19 @@ data:
   processed_path: "data/processed/house_prices_processed.csv"
   external_path: "data/external/"
   
+features:
+  target: "PRICE"
+  numeric_features:
+    - "SQFT"
+    - "BEDROOMS"
+  categorical_features:
+    - "LOCATION"
+    - "REGION"
+    - "TITLED"
+    - "LEASE"
+    - "FOOTINGS"
+
 preprocessing:
-  target_column: "PRICE"
-  features:
-    numeric:
-      - "SQFT"
-      - "BEDROOMS"
-    categorical:
-      - "LOCATION"
-      - "REGION"
-      - "TITLED"
-      - "LEASE"
-      - "FOOTINGS"
   price_range: [10000, 1000000]
   sqft_range: [100, 5000]
   test_size: 0.2

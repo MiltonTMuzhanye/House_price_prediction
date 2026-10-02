@@ -1,10 +1,9 @@
-version: '3.8'
-
 services:
   api:
     build:
       context: .
       dockerfile: deployment/docker/Dockerfile
+    container_name: house-price-api
     ports:
       - "8000:8000"
     volumes:
@@ -12,17 +11,20 @@ services:
       - ./data:/app/data
       - ./logs:/app/logs
     environment:
-      - PYTHONPATH=/app
-    command: uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+      PYTHONPATH: /app
+    restart: unless-stopped
+    command: uvicorn app.api.main:app --host 0.0.0.0 --port 8000
 
   frontend:
     build:
       context: .
       dockerfile: deployment/docker/Dockerfile.frontend
+    container_name: house-price-frontend
     ports:
       - "8501:8501"
     depends_on:
       - api
     environment:
-      - API_URL=http://api:8000
+      API_URL: http://api:8000/api/v1
+    restart: unless-stopped
     command: streamlit run app/frontend/streamlit_app.py --server.port 8501 --server.address 0.0.0.0

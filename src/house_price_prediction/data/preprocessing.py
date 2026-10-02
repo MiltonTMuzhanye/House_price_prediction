@@ -1,130 +1,131 @@
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+
 from ..utils.logger import logger
 from ..utils.config import config
 from ..utils.helpers import save_artifact, load_artifact
 
+
 class DataPreprocessor:
-    """Handles data preprocessing and inference"""
-    
+    """Handles preprocessing and feature engineering."""
+
     def __init__(self):
         self.numeric_features = config.get(
-            'features.numeric_features',
-            ['SQFT', 'BEDROOMS']
+            "features.numeric_features",
+            ["SQFT", "BEDROOMS"],
         )
 
         self.categorical_features = config.get(
-            'features.categorical_features', 
-            ['LOCATION', 'REGION', 'TITLED', 'LEASE', 'FOOTINGS']
+            "features.categorical_features",
+            ["LOCATION", "REGION", "TITLED", "LEASE", "FOOTINGS"],
         )
 
         self.target = config.get(
-            'features.target',
-            'PRICE'
+            "features.target",
+            "PRICE",
         )
 
         self.preprocessor = None
-        self.scaler = StandardScaler()
-        self.encoder = OneHotEncoder(
-            drop='first', 
-            sparse_output=False
-        )
-        
-        # Mapping dictionaries
-        self.location_map = {1: 'Urban', 2: 'Suburban', 3: 'Rural'}
-        self.region_map = {1: 'Northeast', 2: 'Midwest', 3: 'South', 4: 'West'}
-        self.titled_map = {1: 'Vehicle', 2: 'Land-Home', 3: 'Other'}
-        
+
     def map_categorical(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Map categorical variables to readable labels"""
+        """
+        Preserve categorical codes from the source dataset.
+
+        The source data contains coded categorical values, including
+        special codes such as 9. Without an official codebook, these
+        values must not be assigned invented semantic labels.
+        """
+
         df_mapped = df.copy()
-        
-        if 'LOCATION' in df_mapped.columns:
-            df_mapped['LOCATION'] = df_mapped['LOCATION'].map(self.location_map)
-        if 'REGION' in df_mapped.columns:
-            df_mapped['REGION'] = df_mapped['REGION'].map(self.region_map)
-        if 'TITLED' in df_mapped.columns:
-            df_mapped['TITLED'] = df_mapped['TITLED'].map(self.titled_map)
-        if 'LEASE' in df_mapped.columns:
-            df_mapped['LEASE'] = df_mapped['LEASE'].replace({2: 0, 1: 1})
-        
+
+        # Keep categorical variables as categorical/string values.
+        # This prevents unknown source codes from becoming NaN.
+        for column in self.categorical_features:
+            if column in df_mapped.columns:
+                df_mapped[column] = df_mapped[column].astype(str)
+
+        logger.info("Categorical codes preserved from source dataset.")
+
         return df_mapped
-    
+
     def engineer_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Create new features"""
+        """Create engineered features."""
+
         df_engineered = df.copy()
 
-        if 'SQFT' in df_engineered.columns and 'BEDROOMS' in df_engineered.columns:
-            df_engineered['BEDROOMS_PER_SQFT'] = (
-                df_engineered['BEDROOMS']
-                / df_engineered['SQFT']
+        if "SQFT" in df_engineered.columns and "BEDROOMS" in df_engineered.columns:
+            df_engineered["BEDROOMS_PER_SQFT"] = (
+                df_engineered["BEDROOMS"]
+                / df_engineered["SQFT"]
                 * 1000
             )
 
-        if 'SQFT' in df_engineered.columns:
-            df_engineered['LOG_SQFT'] = (
-                df_engineered['SQFT'].clip(lower=0).apply(
-                    lambda x: __import__('numpy').log1p(x)
-                )
+        if "SQFT" in df_engineered.columns:
+            df_engineered["LOG_SQFT"] = (
+                df_engineered["SQFT"]
+                .clip(lower=0)
+                .apply(lambda x: __import__("numpy").log1p(x))
             )
-        
-        logger.info(f"Engineered features: {df_engineered.columns.tolist()}")
+
+        logger.info(
+            f"Engineered features: {df_engineered.columns.tolist()}"
+        )
+
         return df_engineered
-    
+
     def create_preprocessing_pipeline(self):
-        """Create scikit-learn preprocessing pipeline"""
-        # Define transformers
+        """Create the scikit-learn preprocessing pipeline."""
+
         numeric_transformer = Pipeline(
             steps=[
-                ('scaler', StandardScaler())
+                ("scaler", StandardScaler())
             ]
         )
-        
+
         categorical_transformer = Pipeline(
             steps=[
                 (
-                    'onehot',
+                    "onehot",
                     OneHotEncoder(
-                        drop='first',
+                        drop="first",
                         sparse_output=False,
-                        handle_unknown='ignore'
-                    )
+                        handle_unknown="ignore",
+                    ),
                 )
             ]
         )
-        
+
         self.preprocessor = ColumnTransformer(
             transformers=[
-                    (
-                        'num', 
-                        numeric_transformer, 
-                        self.numeric_features
-                    ),
-                    (
-                        'cat', 
-                        categorical_transformer, 
-                        self.categorical_features
-                    )
-                ],
-                remainder='drop'
-            )
-        
+                (
+                    "num",
+                    numeric_transformer,
+                    self.numeric_features,
+                ),
+                (
+                    "cat",
+                    categorical_transformer,
+                    self.categorical_features,
+                ),
+            ],
+            remainder="drop",
+        )
+
         return self.preprocessor
-    
+
     def fit_transform(self, X: pd.DataFrame, y: pd.Series = None):
-        """Fit preprocessing and transform training data"""
+        """Fit preprocessing pipeline and transform training data."""
 
         if self.preprocessor is None:
             self.create_preprocessing_pipeline()
 
         X_processed = self.preprocessor.fit_transform(X)
-        
+
         save_artifact(
-            self.preprocessor, 
-            'artifacts/preprocessor.joblib'
+            self.preprocessor,
+            "artifacts/preprocessor.joblib",
         )
 
         logger.info(
@@ -132,24 +133,24 @@ class DataPreprocessor:
             f"Input features: {len(X.columns)}, "
             f"transformed features: {X_processed.shape[1]}"
         )
-        
+
         return X_processed
-    
+
     def transform(self, X: pd.DataFrame):
-        """Transform new data using saved preprocessor"""
+        """Transform new data using the saved preprocessor."""
+
         preprocessor = load_artifact(
-            'artifacts/preprocessor.joblib'
+            "artifacts/preprocessor.joblib"
         )
 
         return preprocessor.transform(X)
 
-
     def get_feature_names(self):
-        """Return names of transformed features."""
+        """Return transformed feature names."""
 
         if self.preprocessor is None:
             self.preprocessor = load_artifact(
-                'artifacts/preprocessor.joblib'
+                "artifacts/preprocessor.joblib"
             )
 
         return self.preprocessor.get_feature_names_out().tolist()

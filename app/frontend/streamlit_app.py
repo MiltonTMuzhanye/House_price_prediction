@@ -45,7 +45,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # API endpoint
-API_URL = "http://localhost:8000/api/v1"
+import os
+
+API_URL = os.getenv("API_URL", "http://localhost:8000/api/v1")
 
 def main():
     st.markdown('<h1 class="main-header">🏠 House Price Prediction System</h1>', unsafe_allow_html=True)
@@ -72,35 +74,28 @@ def main():
     )
     
     location = st.sidebar.selectbox(
-        "Location Type",
-        options=[1, 2, 3],
-        format_func=lambda x: {1: "Urban", 2: "Suburban", 3: "Rural"}[x]
+        "LOCATION code",
+        options=[1, 2, 3, 4, 9]
     )
     
     region = st.sidebar.selectbox(
-        "Region",
-        options=[1, 2, 3, 4],
-        format_func=lambda x: {1: "Northeast", 2: "Midwest", 3: "South", 4: "West"}[x]
+        "REGION code",
+        options=[1, 2, 3, 4, 5]
     )
     
     titled = st.sidebar.selectbox(
-        "Title Type",
-        options=[1, 2, 3],
-        format_func=lambda x: {1: "Vehicle", 2: "Land-Home", 3: "Other"}[x]
+        "TITLED code",
+        options=[1, 2, 3, 9]
     )
     
     lease = st.sidebar.selectbox(
-        "Lease",
-        options=[0, 1],
-        format_func=lambda x: "Yes" if x == 1 else "No"
+        "LEASE code",
+        options=[2]
     )
     
-    footings = st.sidebar.number_input(
-        "Footing Type",
-        min_value=1,
-        max_value=9,
-        value=1,
-        step=1
+    footings = st.sidebar.selectbox(
+        "FOOTINGS code",
+        options=[1, 2, 3, 4, 5, 9]
     )
     
     # Create feature dict
@@ -122,14 +117,14 @@ def main():
         
         # Display features in a nice table
         feature_df = pd.DataFrame({
-            "Feature": ["Square Footage", "Bedrooms", "Location", "Region", "Title", "Lease", "Footings"],
+            "Feature": ["Square Footage", "Bedrooms", "LOCATION", "REGION", "TITLED", "LEASE", "FOOTINGS"],
             "Value": [
                 f"{sqft} sqft",
                 bedrooms,
-                {1: "Urban", 2: "Suburban", 3: "Rural"}[location],
-                {1: "Northeast", 2: "Midwest", 3: "South", 4: "West"}[region],
-                {1: "Vehicle", 2: "Land-Home", 3: "Other"}[titled],
-                "Yes" if lease == 1 else "No",
+                location,
+                region,
+                titled,
+                lease,
                 footings
             ]
         })

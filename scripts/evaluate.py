@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -168,11 +167,12 @@ def main():
             feature_importance.head(15)
         )
 
-        sns.barplot(
-            data=importance_df,
-            x='importance',
-            y='feature'
+        axes = plt.gca()
+        axes.barh(
+            importance_df['feature'],
+            importance_df['importance']
         )
+        axes.invert_yaxis()
 
         plt.title(
             f"Top 15 Feature Importance - {model_name}"
